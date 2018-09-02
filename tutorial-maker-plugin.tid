@@ -1,0 +1,52 @@
+author: Abraham Samma
+created: 20180901220338215
+description: Create tutorials for TiddlyWiki
+list: readme license
+modified: 20180902163658787
+plugin-type: plugin
+tags: 
+title: $:/plugins/tutorial-maker
+type: application/json
+version: 0.0.18
+
+{
+    "tiddlers": {
+        "$:/plugins/tutorial-maker/tutorial.js": {
+            "created": "20180902101508937",
+            "text": "(function () {\n  /*jslint node: true, browser: true */\n  /*global $tw: false */\n  \"use strict\";\n\n  var Widget = require(\"$:/core/modules/widgets/widget.js\").widget;\n\n  var TutorialWidget = function(parseTreeNode,options) {\n    this.initialise(parseTreeNode,options);\n  };\n\n  /*\n  Inherit from the base widget class\n  */\n  TutorialWidget.prototype = new Widget();\n  \n  TutorialWidget.prototype.render = function (parent,nextSibling) {\n    this.parentDomNode = parent;\n    this.computeAttributes();\n    this.execute();\n  };\n  \n  TutorialWidget.prototype.execute = function () {\n    var t = this.getAttribute(\"tiddler\");\n    var trigger = this.getAttribute(\"trigger\") || \"start-tutorial\";\n    var o = $tw.wiki.getTiddlerData(t) || {};\n    $tw.rootWidget.addEventListener(trigger, function () {\n      try {\n        hopscotch.startTour(o);\n      } catch (err) {\n        return $tw.utils.error(err);\n      }\n    });\n  };\n  \n  TutorialWidget.prototype.refresh = function (changedTiddlers) {\n    this.refreshSelf();\n    return true;\n  };\n  \n  exports.tutorial = TutorialWidget;\n})();",
+            "type": "application/javascript",
+            "title": "$:/plugins/tutorial-maker/tutorial.js",
+            "tags": "",
+            "module-type": "widget",
+            "modified": "20180902160020077"
+        },
+        "$:/plugins/tutorial-maker/hopscotch.js": {
+            "created": "20180902124949628",
+            "text": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/hopscotch/0.3.1/js/hopscotch.min.js\"></script>",
+            "title": "$:/plugins/tutorial-maker/hopscotch.js",
+            "tags": "$:/tags/RawMarkup",
+            "modified": "20180902125231313"
+        },
+        "$:/plugins/tutorial-maker/hopscotch.css": {
+            "created": "20180902124832216",
+            "text": "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/hopscotch/0.3.1/css/hopscotch.min.css\" />",
+            "title": "$:/plugins/tutorial-maker/hopscotch.css",
+            "tags": "$:/tags/RawMarkup",
+            "modified": "20180902124941258"
+        },
+        "$:/plugins/tutorial-maker/readme": {
+            "created": "20180902153847242",
+            "text": "This plugin creates a widget that accepts a single tiddler that defines an interactive tutorial for using ~TiddlyWiki using JSON.\n\n__Widget Attributes__\n\n|!Attribute|!Description|\n|''Tiddler''|Name of tiddler containing JSON tutorial|\n|''Trigger''|The widget message that will trigger this tutorial. Defaults to //start-tutorial//|\n\n__Basic Usage__\n\nThe widget accepts a \n\n# tiddler that contains a JSON object that instructs ~HopScotchjs, a framework product tours, how to step through a tutorial. The documentation for ~HopScotch's API can be found [[here|http://linkedin.github.io/hopscotch/]].\n# A trigger message that the widget should listen out for to start the defined tutorial. This is usually sent by a button widget.\n\nTriggering the tutorial requires a simple `start-tutorial` or any other defined, custom widget message.\n\n__Example__\n\n```\n<$button message=\"start-this-tutorial\">\nStart Tutorial\n</$button>\n\n<$tutorial tiddler=\"Example\" message=\"start-this-tutorial\" />\n```\n",
+            "title": "$:/plugins/tutorial-maker/readme",
+            "tags": "",
+            "modified": "20180902161144881"
+        },
+        "$:/plugins/tutorial-maker/license": {
+            "created": "20180902163113894",
+            "text": "The Tutorial Maker plugin is covered by the following licenses:\n\nMIT License\n\nCopyright (c) 2018 Abraham B. Samma\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n",
+            "title": "$:/plugins/tutorial-maker/license",
+            "tags": "",
+            "modified": "20180902163219905"
+        }
+    }
+}
